@@ -1,8 +1,10 @@
 " -*- vim -*-
-" FILE: "c:/vim/Vimfiles/plugin/localColorSchemes.vim" {{{
-" LAST MODIFICATION: "Wed, 24 Jul 2002 09:19:34 Eastern Daylight Time"
+" FILE: "C:/vim/Vimfiles/plugin/localColorSchemes.vim" {{{
+" LAST MODIFICATION: "Mon, 22 Sep 2003 09:03:21 Eastern Daylight Time (Administrator)"
 " (C) 2002 by Salman Halim, <salmanhalim@hotmail.com>
 " $Id:$ }}}
+
+" Version 1.1
 
 " usage:
 " either  call Setlocalcolors  from  a  particular buffer  or  put inside  the
@@ -28,7 +30,7 @@ augroup END
 " the  default is  to NOT  change the  color scheme  (if the  variable doesn't
 " exist)
 function! <SID>ChangeColors()
-  let scheme = s:GetVar("colorscheme", g:colors_name)
+  let scheme = GetVar("colorscheme", g:colors_name)
 
   " only change colors if necessary
   if (scheme != g:colors_name)
@@ -54,32 +56,12 @@ function! <SID>RemoveLocalColors()
   call s:ChangeColors()
 endfunction
 
-" tries to return the buffer-specific value of a variable; if not found, tries
-" to  return the  global value  --  if that's  not found  either, returns  the
-" optional second parameter (-1 if it's not specified)
-function! <SID>GetVar(...)
-  let varName=a:1
-
-  if (exists("a:2"))
-    let retVal=a:2
-  else
-    let retVal=-1
-  endif
-
-  if (exists ("b:" . varName))
-    let retVal=b:{varName}
-  elseif (exists ("g:" . varName))
-    let retVal=g:{varName}
-  endif
-  return retVal
-endfunction
-
 com! -nargs=? Setlocalcolors call s:SetLocalColors(<q-args>)
 com! Removelocalcolors call s:RemoveLocalColors()
 
 " change the colorscheme and update the global colorscheme variable
 com! -nargs=1 Colorscheme colorscheme <args> | let g:colorscheme = g:colors_name
 
-map <leader>sl :execute "Setlocalcolors " . input("Enter local colorscheme [" . (exists("b:colorscheme") ? b:colorscheme : "NONE") . "]:  ")<cr>
-map <leader>sg :execute "Colorscheme " . input("Enter global colorscheme [" . (exists("g:colorscheme") ? g:colorscheme : "NONE") . "]:  ")<cr>
-map <leader>rl :Removelocalcolors<cr>
+nmap <leader>sl :execute "Setlocalcolors " . input("Enter local colorscheme [" . (exists("b:colorscheme") ? b:colorscheme : "NONE") . "]:  ")<cr>
+nmap <leader>sg :execute "Colorscheme " . input("Enter global colorscheme [" . (exists("g:colorscheme") ? g:colorscheme : "NONE") . "]:  ")<cr>
+nmap <leader>rl :Removelocalcolors<cr>
