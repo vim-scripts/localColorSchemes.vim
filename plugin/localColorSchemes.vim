@@ -1,16 +1,22 @@
 " -*- vim -*-
 " FILE: "C:/vim/Vimfiles/plugin/localColorSchemes.vim" {{{
-" LAST MODIFICATION: "Mon, 22 Sep 2003 09:03:21 Eastern Daylight Time (Administrator)"
+" LAST MODIFICATION: "Mon, 22 Sep 2003 10:24:58 Eastern Daylight Time"
 " (C) 2002 by Salman Halim, <salmanhalim@hotmail.com>
 " $Id:$ }}}
 
-" Version 1.1
+" Version 1.2
 
-" usage:
-" either  call Setlocalcolors  from  a  particular buffer  or  put inside  the
+" Usage:
+"
+" 1.2:
+" Added Removewindowcolors  and Setwindowcolors to set  window-specific colors
+" (along with mappings).
+"
+" Original:
+" Either  call Setlocalcolors  from  a  particular buffer  or  put inside  the
 " ftplugin file to affect all buffers of a particular filetype.
 "
-" call Removelocalcolors  to unlet the local  variable if it exists  (can just
+" Call Removelocalcolors  to unlet the local  variable if it exists  (can just
 " unlet the local variable manually but Remove will change the color scheme if
 " necessary).
 
@@ -21,7 +27,7 @@ if (!exists("g:colorscheme"))
 endif
 
 augroup localColors
-au BufEnter * call s:ChangeColors()
+au WinEnter * call s:ChangeColors()
 augroup END
 
 " if the  variable 'b:colorscheme'  or 'g:colorscheme'  exists it  becomes the
@@ -56,12 +62,35 @@ function! <SID>RemoveLocalColors()
   call s:ChangeColors()
 endfunction
 
+" if the  input parameter is empty,  display the current window  color scheme.
+" otherwise,  set the  window color  scheme to  what is  specified and  change
+" colors is necessary.
+function! <SID>SetWindowColors(colorChoice)
+  if (a:colorChoice == "")
+    echo "Window color scheme is:  " . (exists("w:colorscheme") ? w:colorscheme : "NONE")
+  else
+    let w:colorscheme = a:colorChoice
+    call s:ChangeColors()
+  endif
+endfunction
+
+function! <SID>RemoveWindowColors()
+  " suppress the error message
+  silent! execute "unlet w:colorscheme"
+  call s:ChangeColors()
+endfunction
+
+com! -nargs=? Setwindowcolors call s:SetWindowColors(<q-args>)
+com! Removewindowcolors call s:RemoveWindowColors()
+
 com! -nargs=? Setlocalcolors call s:SetLocalColors(<q-args>)
 com! Removelocalcolors call s:RemoveLocalColors()
 
 " change the colorscheme and update the global colorscheme variable
 com! -nargs=1 Colorscheme colorscheme <args> | let g:colorscheme = g:colors_name
 
+nmap <leader>sw :execute "Setwindowcolors " . input("Enter window colorscheme [" . (exists("w:colorscheme") ? w:colorscheme : "NONE") . "]:  ")<cr>
 nmap <leader>sl :execute "Setlocalcolors " . input("Enter local colorscheme [" . (exists("b:colorscheme") ? b:colorscheme : "NONE") . "]:  ")<cr>
 nmap <leader>sg :execute "Colorscheme " . input("Enter global colorscheme [" . (exists("g:colorscheme") ? g:colorscheme : "NONE") . "]:  ")<cr>
+nmap <leader>rw :Removewindowcolors<cr>
 nmap <leader>rl :Removelocalcolors<cr>
