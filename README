@@ -1,0 +1,9 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=351
+
+This allows the use of buffer-specific color schemes.  Every time one moves from one buffer to another, the color scheme will change to the specified one; setting the variable b:colorscheme inside an ftplugin will allow for all files of a particular type to have that scheme (such as morning for vim files, peachpuff for Java files etc.).
+
+To use, there are three mappings, all starting with <Leader>:  sl prompts and sets a local color scheme, sg does the same for a global color scheme and rl removes any locally set color schemes.  There is also a convenience command called Colorscheme which behaves just like the regular colorscheme command (except for the command-line completion); it also modifies the global colorscheme name.
+
+I have placed the value of the colorscheme names my 'statusline' option so I can tell which colors are being used -- and I stick either a g: or b: before the name so I know if it's a local or global setting.  (Hint:  use a non <SID> version of GetVar -- included within).
+
+The only problem I know of is that syntax settings set by plugins (such as the excellent ShowMarks) get reset every time a color scheme is changed (since they start with a syntax clear).
